@@ -74,20 +74,20 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun TipTimeLayout() {
-    var amountInput by remember { mutableStateOf("") }
+fun TipTimeLayout() { // Structure of the whole page
+    var amountInput by remember { mutableStateOf("") } // Remember the state of the amount input
     var tipInput by remember { mutableStateOf("") }
     var roundUp by remember { mutableStateOf(false) }
 
     val amount = amountInput.toDoubleOrNull() ?: 0.0
-    val tipPercent = tipInput.toDoubleOrNull() ?: 0.0
+    val tipPercent = tipInput.toDoubleOrNull() ?: 0.0 // Convert the string to a double if not possible then 0.0
     val tip = calculateTip(amount, tipPercent, roundUp)
 
     Column(
         modifier = Modifier
             .statusBarsPadding()
             .padding(horizontal = 40.dp)
-            .verticalScroll(rememberScrollState())
+            .verticalScroll(rememberScrollState()) // Remember the scroll state (vertically)
             .safeDrawingPadding(),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
@@ -106,15 +106,16 @@ fun TipTimeLayout() {
                 imeAction = ImeAction.Next
             ),
             value = amountInput,
-            onValueChanged = { amountInput = it },
+            onValueChanged = { amountInput = it }, // "it" can be changed. We are using it because
+            // the lambda function takes a single parameter
             modifier = Modifier.padding(bottom = 32.dp).fillMaxWidth(),
         )
         EditNumberField(
             label = R.string.how_was_the_service,
             leadingIcon = R.drawable.percent,
-            keyboardOptions = KeyboardOptions.Default.copy(
-                keyboardType = KeyboardType.Number,
-                imeAction = ImeAction.Done
+            keyboardOptions = KeyboardOptions.Default.copy( // Copy the default keyboard options
+                keyboardType = KeyboardType.Number, // Set the keyboard type to number
+                imeAction = ImeAction.Done // Set the action to done -> Exit keyboard
             ),
             value = tipInput,
             onValueChanged = { tipInput = it },
@@ -127,27 +128,28 @@ fun TipTimeLayout() {
         )
         Text(
             text = stringResource(R.string.tip_amount, tip),
-            style = MaterialTheme.typography.displaySmall
+            style = MaterialTheme.typography.displaySmall // Smallest display text style
         )
         Spacer(modifier = Modifier.height(100.dp))
     }
 }
 
+// Now we begin to go into more details related to the functions we called for the overall structure
 @Composable
 fun EditNumberField(
-    @StringRes label: Int,
-    @DrawableRes leadingIcon: Int,
+    @StringRes label: Int, // The parameter must be a string source
+    @DrawableRes leadingIcon: Int, // The parameter must be a drawable resource
     keyboardOptions: KeyboardOptions,
     value: String,
-    onValueChanged: (String) -> Unit,
+    onValueChanged: (String) -> Unit, // A lambda function that takes a string parameter and returns nothing
     modifier: Modifier = Modifier
 ) {
     TextField(
         value = value,
-        singleLine = true,
+        singleLine = true, // Single line text field
         leadingIcon = { Icon(painter = painterResource(id = leadingIcon), null) },
         modifier = modifier,
-        onValueChange = onValueChanged,
+        onValueChange = onValueChanged, // The lambda function is called when the value changes
         label = { Text(stringResource(label)) },
         keyboardOptions = keyboardOptions
     )
@@ -161,7 +163,7 @@ fun RoundTheTipRow(
 ) {
     Row(
         modifier = modifier.fillMaxWidth(),
-        verticalAlignment = Alignment.CenterVertically
+        verticalAlignment = Alignment.CenterVertically // Align the elements vertically
     ) {
         Text(text = stringResource(R.string.round_up_tip))
         Switch(
@@ -180,7 +182,7 @@ private fun calculateTip(amount: Double, tipPercent: Double = 15.0, roundUp: Boo
     if (roundUp) {
         tip = kotlin.math.ceil(tip)
     }
-    return NumberFormat.getCurrencyInstance().format(tip)
+    return NumberFormat.getCurrencyInstance().format(tip) // Format the tip as currency
 }
 
 @Preview(showBackground = true)
