@@ -129,7 +129,7 @@ fun TipTimeLayout() {
             text = stringResource(R.string.tip_amount, tip),
             style = MaterialTheme.typography.displaySmall
         )
-        Spacer(modifier = Modifier.height(150.dp))
+        Spacer(modifier = Modifier.height(100.dp))
     }
 }
 
@@ -167,6 +167,7 @@ fun RoundTheTipRow(
         Switch(
             modifier = Modifier
                 .fillMaxWidth()
+                .padding(start = 8.dp)
                 .wrapContentWidth(Alignment.End),
             checked = roundUp,
             onCheckedChange = onRoundUpChanged
@@ -174,11 +175,6 @@ fun RoundTheTipRow(
     }
 }
 
-/**
- * Calculates the tip based on the user input and format the tip amount
- * according to the local currency.
- * Example would be "$10.00".
- */
 private fun calculateTip(amount: Double, tipPercent: Double = 15.0, roundUp: Boolean): String {
     var tip = tipPercent / 100 * amount
     if (roundUp) {
